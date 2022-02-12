@@ -47,16 +47,16 @@ target_include_directories(phoni PUBLIC    "../../include/ms"
                                         )
 target_compile_options(phoni PUBLIC "-std=c++17")
 
-add_executable(phoni_compatibility phoni_compatibility_driver.cpp)
-target_link_libraries(phoni_compatibility common sdsl divsufsort divsufsort64 malloc_count ri)
-target_include_directories(phoni_compatibility PUBLIC    "../../include/ms" 
-                                        "../../include/common" 
-                                        "${shaped_slp_SOURCE_DIR}" 
-                                        "${FOLCA_SOURCE_DIR}" 
-                                        "${SUX_SOURCE_DIR}/function" 
-                                        "${SUX_SOURCE_DIR}/support"
-                                        )
-target_compile_options(phoni_compatibility PUBLIC "-std=c++17")
+add_executable(phoni_mum phoni_mum.cpp)
+ target_link_libraries(phoni_mum common sdsl divsufsort divsufsort64 malloc_count ri)
+ target_include_directories(phoni_mum PUBLIC    "../../include/ms" 
+                                         "../../include/common" 
+                                         "${shaped_slp_SOURCE_DIR}" 
+                                         "${FOLCA_SOURCE_DIR}" 
+                                         "${SUX_SOURCE_DIR}/function" 
+                                         "${SUX_SOURCE_DIR}/support"
+                                         )
+ target_compile_options(phoni_mum PUBLIC "-std=c++17")
 
 add_executable(build_phoni build_phoni.cpp)
 target_link_libraries(build_phoni common sdsl divsufsort divsufsort64 malloc_count ri)
