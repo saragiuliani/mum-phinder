@@ -69,6 +69,17 @@ target_include_directories(build_phoni PUBLIC    "../../include/ms"
                                         )
 target_compile_options(build_phoni PUBLIC "-std=c++17")
 
+add_executable(sample_lcp sample_lcp.cpp)
+target_link_libraries(sample_lcp common sdsl divsufsort divsufsort64 malloc_count ri)
+target_include_directories(sample_lcp PUBLIC    "../../include/ms" 
+                                        "../../include/common" 
+                                        "${shaped_slp_SOURCE_DIR}" 
+                                        "${FOLCA_SOURCE_DIR}" 
+                                        "${SUX_SOURCE_DIR}/function" 
+                                        "${SUX_SOURCE_DIR}/support"
+                                        )
+target_compile_options(sample_lcp PUBLIC "-std=c++17")
+
 
 add_executable(bwt2rlbwt bwt2rlbwt.cpp)
 target_compile_options(bwt2rlbwt PUBLIC "-std=c++17")

@@ -189,7 +189,7 @@ endif()
  FetchContent_Declare(
    pfp_thresholds
    GIT_REPOSITORY https://github.com/maxrossi91/pfp-thresholds
-   GIT_TAG develop
+   GIT_TAG lcp-mums
    )
   
 FetchContent_GetProperties(pfp_thresholds)

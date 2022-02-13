@@ -228,7 +228,8 @@ public:
 
         read_samples(filename + ".ssa", this->r, n, samples_start);
         read_samples(filename + ".esa", this->r, n, this->samples_last);
-        read_lcp(filename + ".lcp", this->r, this->lcp_start, this->lcp_last, n);
+        // read_lcp(filename + ".lcp", this->r, this->lcp_start, this->lcp_last, n);
+        load_lcp(filename + ".mums.lcp", this->r, this->lcp_start, this->lcp_last, n);
         verbose("lcp_start ", lcp_start.size(), "lcp_last ", lcp_last.size(), "samples_start ", samples_start.size());
 
 
@@ -296,6 +297,44 @@ public:
       }
       if (not new_run) lcp_last[k] = prev_lcp_value;
       assert(k == (r - 1));
+      fclose(fd);
+
+      sdsl::util::bit_compress(lcp_start);
+      sdsl::util::bit_compress(lcp_last);
+  	}
+
+    void load_lcp(std::string filename, ulint r, int_vector<> &lcp_start,  int_vector<> &lcp_last, size_t bound = std::numeric_limits<size_t>::max()){
+  		// Get the size in bits of the max lcp
+      int bit_size = sizeof(size_t) * 8;
+      if (bound > 0)      
+        bit_size = bitsize(bound);
+
+      struct stat filestat;
+      FILE *fd;
+
+      if ((fd = fopen(filename.c_str(), "r")) == nullptr)
+          error("open() file " + filename + " failed");
+
+      int fn = fileno(fd);
+      if (fstat(fn, &filestat) < 0)
+          error("stat() file " + filename + " failed");
+
+      if (filestat.st_size % SSABYTES != 0)
+          error("invalid file " + filename);
+
+	    // Create the vectors
+      lcp_start = int_vector<>(r, 0, bit_size);
+      lcp_last = int_vector<>(r, 0, bit_size);
+
+  		// Read the vector
+  		uint64_t start = 0;
+      uint64_t end = 0;
+      size_t i = 0;
+      while (fread((char *)&start, SSABYTES, 1, fd) && fread((char *)&end, SSABYTES, 1,fd))
+      {
+          lcp_start[i] = start <= bound ? start : bound;
+          lcp_last[i++] = end <= bound ? end : bound;
+      }
       fclose(fd);
 
       sdsl::util::bit_compress(lcp_start);

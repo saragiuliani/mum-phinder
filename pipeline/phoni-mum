@@ -39,8 +39,8 @@ pfbwtNT_exe64   =  os.path.join(bigbwt_dirname, "pfbwtNT64.x")
 
 pfp_thresholds          = os.path.join(thresholds_dirname, "pfp_thresholds")
 pfp_thresholds64        = os.path.join(thresholds_dirname, "pfp_thresholds64")
-pfp_lcp                 = os.path.join(thresholds_dirname, "pfp_lcp")
-pfp_lcp64               = os.path.join(thresholds_dirname, "pfp_lcp64")
+pfp_lcp                 = os.path.join(thresholds_dirname, "pfp_lcp_mums")
+pfp_lcp64               = os.path.join(thresholds_dirname, "pfp_lcp_mums64")
 
 compress_exe            = os.path.join(compress_dirname, "compress_dictionary")
 
@@ -129,17 +129,18 @@ class PFPlcp(threading.Thread):
 
       # if args.s: command += " -s"
       if args.m: command += " -m"
+      command += " -r"
       
       print("==== Computing LCP array. Command:", command)
       if(execute_command(command,logfile,logfile_name)!=True):
         return
       
-      command = "{exe} {file}".format(
-          exe = rlbwt_exe, file=args.input + ".bwt")
+      # command = "{exe} {file}".format(
+      #     exe = rlbwt_exe, file=args.input + ".bwt")
                 
-      print("==== Run-length encoding the BWT. Command:", command)
-      if(execute_command(command,logfile,logfile_name)!=True):
-        return
+      # print("==== Run-length encoding the BWT. Command:", command)
+      # if(execute_command(command,logfile,logfile_name)!=True):
+      #   return
       print("LCP Elapsed time: {0:.4f}".format(time.time()-start));
 
 
@@ -513,7 +514,7 @@ def main():
 def delete_temp_files(args,logfile,logfile_name):
     if args.k==False:
       print("==== Deleting temporary files.") # no need to show the command
-      command = "rm -f {file}.parse_old {file}.last {file}.bwlast {file}.ilist {file}.bwt {file}.bwt.heads {file}.bwt.len {file}.C {file}.dict {file}.dicz {file}.dicz.len {file}.esa {file}.lcp {file}.occ {file}.parse {file}.R {file}.ssa".format(file=args.input)
+      command = "rm -f {file}.parse_old {file}.last {file}.bwlast {file}.ilist {file}.bwt.heads {file}.bwt.len {file}.C {file}.dict {file}.dicz {file}.dicz.len {file}.esa {file}.mums.lcp {file}.occ {file}.parse {file}.R {file}.ssa".format(file=args.input)
       #command = "rm -f {file}.parse {file}.parse_old {file}.last {file}.bwlast {file}.dicz {file}.ilist {file}.occ".format(file=args.input)
       if(execute_command(command,logfile,logfile_name)!=True):
         return
