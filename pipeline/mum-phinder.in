@@ -33,7 +33,7 @@ if not install:
   bigbwt_dirname = os.path.join(dirname, "_deps/bigbwt-build")
   bigrepair_dirname = os.path.join(dirname, "_deps/bigrepair-build")
   thresholds_dirname = os.path.join(dirname, "_deps/pfp_thresholds-build/test/src")
-  compress_dirname = os.path.join(dirname, "test/src")
+  compress_dirname = os.path.join(dirname, "src")
   shaped_slp_dirname = os.path.join(dirname, "_deps/shaped_slp-build")
   repair_dirname = os.path.join(bigrepair_dirname, "repair")
   largeb_repair_dirname = os.path.join(bigrepair_dirname, "largeb_repair")
@@ -56,7 +56,7 @@ pfp_lcp64 = os.path.join(thresholds_dirname, "pfp_lcp_mums64")
 
 compress_exe = os.path.join(compress_dirname, "compress_dictionary")
 
-build_mum_phinder_exe = os.path.join(compress_dirname, "build_phoni")
+build_mum_phinder_exe = os.path.join(compress_dirname, "build_mum_phinder")
 
 repair_exe = os.path.join(repair_dirname, "irepair")
 largerepair_exe = os.path.join(largeb_repair_dirname, "largeb_irepair")
@@ -74,7 +74,7 @@ integer_postprocess_exe = os.path.join(bigrepair_dirname, "ipostproc")
 shaped_slp = os.path.join(shaped_slp_dirname, "SlpEncBuild")
 
 
-query_mum_phinder_exe = os.path.join(compress_dirname, "phoni_mum")
+query_mum_phinder_exe = os.path.join(compress_dirname, "query_mum_phinder")
 
 
 def get_max_memory():

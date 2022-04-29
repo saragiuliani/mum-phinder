@@ -60,7 +60,7 @@ endif()
 
 
 add_subdirectory(include)
-add_subdirectory(test/src)
+add_subdirectory(src)
 
 
 
@@ -73,7 +73,7 @@ set(USE_INSTALL_PATH True)
 configure_file(${PROJECT_SOURCE_DIR}/pipeline/mum-phinder.in ${PROJECT_BINARY_DIR}/mum-phinder.install @ONLY)
 
 
-install(TARGETS build_phoni phoni_mum compress_dictionary TYPE RUNTIME)
+install(TARGETS build_mum_phinder query_mum_phinder compress_dictionary TYPE RUNTIME)
 install(TARGETS SlpEncBuild pfp_lcp_mums pfp_lcp_mums64 TYPE RUNTIME)
 install(PROGRAMS ${PROJECT_BINARY_DIR}/mum-phinder.install RENAME mum-phinder TYPE BIN)
 
