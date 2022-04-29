@@ -13,8 +13,8 @@ set(SUX_SOURCE_DIR ${shaped_slp_SOURCE_DIR}/external/sux/sux)
 
 add_executable(query_mum_phinder mum-phinder.cpp)
  target_link_libraries(query_mum_phinder common sdsl divsufsort divsufsort64 malloc_count ri)
- target_include_directories(query_mum_phinder PUBLIC    "../../include/ms" 
-                                         "../../include/common" 
+ target_include_directories(query_mum_phinder PUBLIC    "../include/ms" 
+                                         "../include/common" 
                                          "${shaped_slp_SOURCE_DIR}" 
                                          "${FOLCA_SOURCE_DIR}" 
                                          "${SUX_SOURCE_DIR}/function" 
@@ -24,8 +24,8 @@ add_executable(query_mum_phinder mum-phinder.cpp)
 
 add_executable(build_mum_phinder build_mum-phinder.cpp)
 target_link_libraries(build_mum_phinder common sdsl divsufsort divsufsort64 malloc_count ri)
-target_include_directories(build_mum_phinder PUBLIC    "../../include/ms" 
-                                        "../../include/common" 
+target_include_directories(build_mum_phinder PUBLIC    "../include/ms" 
+                                        "../include/common" 
                                         "${shaped_slp_SOURCE_DIR}" 
                                         "${FOLCA_SOURCE_DIR}" 
                                         "${SUX_SOURCE_DIR}/function" 

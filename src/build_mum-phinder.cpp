@@ -6,7 +6,7 @@
 
 #include <sdsl/io.hpp>
 
-#include <phoni.hpp>
+#include <mum-phinder.hpp>
 
 #include <malloc_count.h>
 
@@ -17,7 +17,7 @@ int main(int argc, char *const argv[]) {
   Args args;
   parseArgs(argc, argv, args);
 
-  verbose("Building the phoni index");
+  verbose("Building the MUM-PHINDER index");
   std::chrono::high_resolution_clock::time_point t_insert_start = std::chrono::high_resolution_clock::now();
 
 
@@ -26,12 +26,12 @@ int main(int argc, char *const argv[]) {
 
   std::chrono::high_resolution_clock::time_point t_insert_end = std::chrono::high_resolution_clock::now();
 
-  verbose("PHONI index construction complete");
+  verbose("MUM-PHINDER index construction complete");
   verbose("Memory peak: ", malloc_count_peak());
   verbose("Elapsed time (s): ", std::chrono::duration<double, std::ratio<1>>(t_insert_end - t_insert_start).count());
 
   {
-  ofstream outfile(args.filename + ".phoni", std::ios::binary);
+  ofstream outfile(args.filename + ".mum-phinder", std::ios::binary);
   ms.serialize(outfile);
   }
 
