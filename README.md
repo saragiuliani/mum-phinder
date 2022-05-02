@@ -6,46 +6,85 @@ MUM-PHINDER computes the set of the Maximal Unique Matches of a query pattern ag
 We require the pattern and the text to be available in form of sequences stored in the `.fa` (FASTA) format.
 To use our solution, you need to have recent `cmake`, `g++`, `zsh`, and `python 3` installed.
 
-#Example
+
+
+### Construction of the index:
+```
+usage: mum-phinder build    [-h] -r REFERENCE [-w WSIZE] [-p MOD] [-t THREADS] [-k] [-v] [-f]
+  -h, --help            show this help message and exit
+  -r REFERENCE, --reference REFERENCE
+                        reference file name (default: None)
+  -o OUTPUT, --output OUTPUT
+                        output directory path (default: same as reference)
+  -w WSIZE, --wsize WSIZE
+                        sliding window size (default: 10)
+  -p MOD, --mod MOD     hash modulus (default: 100)
+  -t THREADS, --threads THREADS
+                        number of helper threads (default: 0)
+  -k                    keep temporary files (default: False)
+  -v                    verbose (default: False)
+  -f                    read fasta (default: False)
+
+```
+
+
+### Computing the MUMss with MUM-PHINDER:
+```
+usage: mum-phinder build [-h] -i INDEX -p PATTERN 
+  -h, --help            show this help message and exit
+  -i INDEX, --index INDEX
+                        reference index base name (default: None)
+  -p PATTERN, --pattern PATTERN
+                        the input query (default: None)
+```
+
+# Example
 
 ### Download MUM-PHINDER
 
 ```console
-git clone --branch phoni https://github.com/saragiuliani/mum-phinder
+git clone https://github.com/saragiuliani/mum-phinder
 ```
 
-### Compile
+### Compile and Install
 
 ```console
 mkdir build
-cd build; cmake ..
+cd build; cmake -DCMAKE_INSTALL_PREFIX=<path/to/install/prefix> ..
 make
+make install
 ```
+
+Replace `<path/to/install/prefix>` with your preferred install path. If not specified the install path is `/usr/`bin` by default.
 
 ### Run
 
 ##### Download the data 
-From the `experiments\sars-cov2` folder:
+
+**Important:** `Java 8.1` and `unzip` are required to download the data. They can be installed through `conda` with `conda install -c conda-forge openjdk unzip`.
+
+To download the data, run:
 
 ```console
+cd experiments/sars-cov2
 bash ./download.sh <dataFolder>
 ```
 
-where `<dataFolder>` is the folder where to download the data. It requires Java 8.1 and unzip.
+where `<dataFolder>` is the folder where you want to download the data. 
 
 
 ##### Build the index for a reference SARS-CoV2.2k.fa
 From the `build` directory:
 
 ```console
-python3 phoni-mum <dataFolder>/Ref/SARS-CoV2.2k.fa -f
+python3 mum-phinder build -r <dataFolder>/SARS-CoV2.2k.fa -f
 ```
 This command will produce three files `SARS-CoV2.2k.fa.slp`, `SARS-CoV2.2k.fa.phoni`, and `SARS-CoV2.2k.fa.moni.log` in the `<dataFolder>/Ref` folder. The files contain the grammar, ..., and a log file with the information about the index (such as the length of the reference sequence, the alphabet size, the number of runs of the BWT, and more).
 
 ##### Compute the MUMs of the query MZ477765.fa agains the reference SARS-CoV2.2k.fa with mum-phinder 
 
 ```console
-./test/src/phoni_mum <dataFolder>/Ref/SARS-CoV2.2k.fa -p <dataFolder>/Pattern/MZ477765.fa 
+python3 mum-phinder mums -i <dataFolder>/SARS-CoV2.2k.fa -p <dataFolder>/MZ477765.fa 
 ```
 
 This command will produce the output file `MZ477765.fa.mums` in the `<dataFolder>/Pattern` folder containing the MUMs of the query sequence `MZ477765.fa` against the reference `SARS-CoV2.2k.fa` in the following form: position in the reference,   position in the query,   length of the MUM.
@@ -53,9 +92,9 @@ This command will produce the output file `MZ477765.fa.mums` in the `<dataFolder
 
 # Authors
 
-* Sara Giuliani
-* Giuseppe Romana
-* Massimiliano Rossi
+* [Sara Giuliani](https://github.com/saragiuliani)
+* [Giuseppe Romana](https://github.com/GiuseppeRomana)
+* [Massimiliano Rossi](https://github.com/maxrossi91)
 
 # References
 
