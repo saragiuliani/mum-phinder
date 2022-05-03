@@ -42,3 +42,8 @@ python3 phoni-mum ../data/yeast.fasta -f
 diff mummer.out phoni_mum.out
 ```
 
+# Build the docker image
+
+```console
+docker build --platform linux/amd64 -t maxrossi91/mum-phinder . 
+```
