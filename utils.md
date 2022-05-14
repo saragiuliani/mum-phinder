@@ -45,5 +45,7 @@ diff mummer.out phoni_mum.out
 # Build the docker image
 
 ```console
-docker build --platform linux/amd64 -t maxrossi91/mum-phinder . 
+docker build --platform linux/amd64 --no-cache -t maxrossi91/mum-phinder . 
 ```
+
+docker run --platform linux/amd64 -v `pwd`/experiments/sars-cov2/data:/data  -it maxrossi91/mum-phinder bash
