@@ -22,10 +22,6 @@ message(STATUS "Install directory: ${CMAKE_INSTALL_PREFIX}")
 # About this project
 # ------------------------------------------------------------------------------
 project(mum-phinder)
-SET(VERSION_MAJOR "0")
-SET(VERSION_MINOR "1")
-SET(VERSION_PATCH "0")
-SET(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # Set environment
 # ------------------------------------------------------------------------------
@@ -59,11 +55,35 @@ else ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 endif()
 
 
+
+# Configure the version
+# ------------------------------------------------------------------------------
+
+include(GitVersion)
+
+SetGitVersionVariables()
+
+message("Configuring version file")
+message("Version ${GIT_VERSION_DESC} on branch ${GIT_VERSION_BRANCH}")
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/common/version.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/include/common/version.hpp)
+
+string(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${GIT_VERSION_DESC}")
+string(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${GIT_VERSION_DESC}")
+string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${GIT_VERSION_DESC}")
+string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" VERSION_SHA1 "${GIT_VERSION_DESC}")
+
+SET(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+
+# Add targets
+# ------------------------------------------------------------------------------
 add_subdirectory(include)
 add_subdirectory(src)
 
 
 
+# Set install targets
+# ------------------------------------------------------------------------------
 # Configure pipeline for build folder
 set(USE_INSTALL_PATH False)
 configure_file(${PROJECT_SOURCE_DIR}/pipeline/mum-phinder.in ${PROJECT_BINARY_DIR}/mum-phinder @ONLY)
