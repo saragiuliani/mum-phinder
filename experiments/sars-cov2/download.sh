@@ -1,14 +1,13 @@
 
 # to download the reference sequences
 
-wget https://ftp.ebi.ac.uk/pub/databases/covid19dataportal/cdp-file-downloader.zip
-unzip cdp-file-downloader.zip
+# wget https://ftp.ebi.ac.uk/pub/databases/covid19dataportal/cdp-file-downloader.zip
+# unzip cdp-file-downloader.zip
 
 mkdir -p ${1}
-#mkdir -p ${1}/Ref
-#mkdir -p ${1}/Pattern
 
-for i in {00..01};
+accessions=("00" "01")
+for i in ${accessions[@]};
 do
     acc="accessions/acc_${i}"
     java -jar cdp-file-downloader.jar --domain=VIRAL_SEQUENCES --datatype=SEQUENCES --format=FASTA --location=${1} --email=NONE --accessions=`awk '{gsub("\"",""); print $1}' ${acc} | paste -s -d, -` --protocol=FTP --asperaLocation=null
