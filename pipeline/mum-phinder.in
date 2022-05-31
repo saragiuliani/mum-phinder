@@ -17,6 +17,9 @@ Report bugs to Sara Giuliani (sara.giuliani_01@univr.it) and
 """
 
 install = @USE_INSTALL_PATH@
+git_commit = @GIT_VERSION_REV@
+git_branch = @GIT_VERSION_BRANCH@
+git_tag = @GIT_VERSION_TAG@
 
 dirname = os.path.dirname(os.path.abspath(__file__))
 
@@ -516,34 +519,35 @@ def query(args):
 
 
 def getGitDesc():
-    branch = (
-        subprocess.check_output(
-            "git rev-parse --abbrev-ref HEAD", shell=True, cwd=dirname
-        )
-        .strip()
-        .decode("utf-8")
-    )
-    commit = (
-        subprocess.check_output("git rev-parse HEAD", shell=True, cwd=dirname)
-        .strip()
-        .decode("utf-8")
-    )
-    try:
-        tag = (
-            subprocess.check_output(
-                "git describe --exact-match {commit_id}".format(commit_id=commit),
-                shell=True,
-                cwd=dirname,
-            )
-            .strip()
-            .decode("utf-8")
-        )
-    except subprocess.CalledProcessError as e:
-        tag = ""
-    return "branch: {branch}\n   tag: {tag}\ncommit: {commit}".format(
-        branch=branch, tag=tag, commit=commit
-    )
+    # branch = (
+    #     subprocess.check_output(
+    #         "git rev-parse --abbrev-ref HEAD", shell=True, cwd=dirname
+    #     )
+    #     .strip()
+    #     .decode("utf-8")
+    # )
+    # commit = (
+    #     subprocess.check_output("git rev-parse HEAD", shell=True, cwd=dirname)
+    #     .strip()
+    #     .decode("utf-8")
+    # )
+    # try:
+    #     tag = (
+    #         subprocess.check_output(
+    #             "git describe --exact-match {commit_id}".format(commit_id=commit),
+    #             shell=True,
+    #             cwd=dirname,
+    #         )
+    #         .strip()
+    #         .decode("utf-8")
+    #     )
+    # except subprocess.CalledProcessError as e:
+    #     tag = ""
+    # return "branch: {branch}\n   tag: {tag}\ncommit: {commit}".format(
+    #     branch=branch, tag=tag, commit=commit
+    # )
 
+    return  f"MUM-PHINDER version summary.\n  version tag: {git_tag}\n  branch name: {git_branch}\n   git commit: {git_commit}"
 
 def base(args):
     if args.version:
