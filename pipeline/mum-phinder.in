@@ -17,9 +17,9 @@ Report bugs to Sara Giuliani (sara.giuliani_01@univr.it) and
 """
 
 install = @USE_INSTALL_PATH@
-git_commit = @GIT_VERSION_REV@
-git_branch = @GIT_VERSION_BRANCH@
-git_tag = @GIT_VERSION_TAG@
+git_commit = "@GIT_VERSION_REV@"
+git_branch = "@GIT_VERSION_BRANCH@"
+git_tag = "@GIT_VERSION_TAG@"
 
 dirname = os.path.dirname(os.path.abspath(__file__))
 
