@@ -389,6 +389,7 @@ void parseArgs(int argc, char *const argv[], Args &arg)
       break;
     case 'v':
       info(mum_phinder_version.get_version());
+      exit(0);
       break;
     case 'h':
       error(usage);
