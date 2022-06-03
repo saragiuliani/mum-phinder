@@ -41,6 +41,7 @@ function(SetGitVersionVariables)
         string(SUBSTRING "${GIT_REV}" 1 7 GIT_REV)
         string(STRIP "${GIT_DIFF}" GIT_DIFF)
         string(STRIP "${GIT_TAG}" GIT_TAG)
+        string(STRIP "${GIT_DESC}" GIT_DESC)
         string(STRIP "${GIT_BRANCH}" GIT_BRANCH)
 
         if ("${GIT_TAG}" STREQUAL "")
