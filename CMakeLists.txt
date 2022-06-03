@@ -18,18 +18,13 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 endif()
 
+message(STATUS "Install directory: ${CMAKE_INSTALL_PREFIX}")
 # About this project
 # ------------------------------------------------------------------------------
-project(moni)
-SET(VERSION_MAJOR "0")
-SET(VERSION_MINOR "1")
-SET(VERSION_PATCH "0")
-SET(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+project(mum-phinder)
 
 # Set environment
 # ------------------------------------------------------------------------------
-set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
-
 
 find_package(Git)
 if(GIT_FOUND)
@@ -60,12 +55,71 @@ else ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 endif()
 
 
-add_subdirectory(include)
-add_subdirectory(test/src)
-# add_subdirectory(benchmarks/src)
 
-configure_file(${PROJECT_SOURCE_DIR}/pipeline/moni ${PROJECT_BINARY_DIR}/moni)
-configure_file(${PROJECT_SOURCE_DIR}/pipeline/thresholds ${PROJECT_BINARY_DIR}/thresholds)
-configure_file(${PROJECT_SOURCE_DIR}/pipeline/no_thresholds ${PROJECT_BINARY_DIR}/no_thresholds)
-configure_file(${PROJECT_SOURCE_DIR}/pipeline/phoni ${PROJECT_BINARY_DIR}/phoni)
-configure_file(${PROJECT_SOURCE_DIR}/pipeline/phoni-mum ${PROJECT_BINARY_DIR}/phoni-mum)
+# Configure the version
+# ------------------------------------------------------------------------------
+
+include(GitVersion)
+
+SetGitVersionVariables()
+
+message("Configuring version file")
+message("Version ${GIT_VERSION_DESC} on branch ${GIT_VERSION_BRANCH}")
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/common/version.hpp.in ${CMAKE_CURRENT_SOURCE_DIR}/include/common/version.hpp)
+
+string(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${GIT_VERSION_DESC}")
+string(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${GIT_VERSION_DESC}")
+string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${GIT_VERSION_DESC}")
+string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" VERSION_SHA1 "${GIT_VERSION_DESC}")
+
+SET(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+
+# Add targets
+# ------------------------------------------------------------------------------
+add_subdirectory(include)
+add_subdirectory(src)
+
+
+
+# Set install targets
+# ------------------------------------------------------------------------------
+# Configure pipeline for build folder
+set(USE_INSTALL_PATH False)
+configure_file(${PROJECT_SOURCE_DIR}/pipeline/mum-phinder.in ${PROJECT_BINARY_DIR}/mum-phinder @ONLY)
+
+# Configure pipeline for install folder
+set(USE_INSTALL_PATH True)
+configure_file(${PROJECT_SOURCE_DIR}/pipeline/mum-phinder.in ${PROJECT_BINARY_DIR}/mum-phinder.install @ONLY)
+
+
+install(TARGETS build_mum_phinder query_mum_phinder compress_dictionary TYPE RUNTIME)
+install(TARGETS SlpEncBuild pfp_lcp_mums pfp_lcp_mums64 TYPE RUNTIME)
+install(PROGRAMS ${PROJECT_BINARY_DIR}/mum-phinder.install RENAME mum-phinder TYPE BIN)
+
+# Configure cpack variables
+# ------------------------------------------------------------------------------
+
+set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
+set(CPACK_PACKAGE_VERSION "v${VERSION}")
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_GENERATOR "STGZ;TGZ;DEB")
+set(CPACK_SOURCE_GENERATOR "TGZ")
+set(CPACK_PACKAGE_VENDOR "University of Florida")
+set(CPACK_PACKAGE_CONTACT "rossi.m@ufl.edu")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MUM-PHINDER - Pangenomic index for finding MUMs")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+set(CPACK_PACKAGE_NAME "${CMAKE_PROJECT_NAME}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-sources")
+
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Massimiliano Rossi")
+set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT) 
+set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE) # Groupp all components
+# set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.1-6), libc6 (< 2.4)")
+set (CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+set(CPACK_DEB_COMPONENT_INSTALL YES)
+include(CPack)

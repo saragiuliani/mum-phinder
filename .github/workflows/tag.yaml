@@ -1,0 +1,82 @@
+on:
+  push:
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Release
+env:
+  BUILD_TYPE: Release
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        shell: bash
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          set -x
+          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+          set +x
+          
+      - name: Make Package
+        working-directory: ${{github.workspace}}/build 
+        run: |
+          cpack
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: true
+          prerelease: false
+
+      - name: Upload deb package
+        id: upload-release-asset-deb 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{github.workspace}}/build/mum-phinder_${{ steps.get_version.outputs.VERSION }}_amd64.deb
+          asset_name: mum-phinder_${{ steps.get_version.outputs.VERSION }}_amd64.deb
+          asset_content_type: application/package
+
+      - name: Upload sh package
+        id: upload-release-asset-sh
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{github.workspace}}/build/mum-phinder-${{ steps.get_version.outputs.VERSION }}-Linux.sh
+          asset_name: mum-phinder-${{ steps.get_version.outputs.VERSION }}-Linux.sh
+          asset_content_type: application/x-sh
+
+      - name: Upload tar.gz package
+        id: upload-release-asset-tar-gz
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{github.workspace}}/build/mum-phinder-${{ steps.get_version.outputs.VERSION }}-Linux.tar.gz
+          asset_name: mum-phinder-${{ steps.get_version.outputs.VERSION }}-Linux.tar.gz
+          asset_content_type: application/gzip
+
+            
+
