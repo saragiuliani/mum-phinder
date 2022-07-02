@@ -1,0 +1,33 @@
+
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Giuliani"
+  given-names: "Sara"
+  orcid: "http://orcid.org/0000-0002-1179-3929"
+- family-names: "Romana"
+  given-names: "Giuseppe"
+  orcid: "https://orcid.org/0000-0002-3489-0684"
+- family-names: "Rossi"
+  given-names: "Massimiliano"
+  orcid: "https://orcid.org/0000-0002-3012-1394"
+title: "Computing Maximal Unique Matchs with the r-index"
+url: "https://github.com/saragiuliani/mum-phinder"
+preferred-citation:
+  type: conference-paper
+  authors:
+  - family-names: "Giuliani"
+    given-names: "Sara"
+    orcid: "http://orcid.org/0000-0002-1179-3929"
+  - family-names: "Romana"
+    given-names: "Giuseppe"
+    orcid: "https://orcid.org/0000-0002-3489-0684"
+  - family-names: "Rossi"
+    given-names: "Massimiliano"
+    orcid: "https://orcid.org/0000-0002-3012-1394"
+  doi: 10.4230/LIPIcs.SEA.2022.22
+  journal: "In Proceedings of the 20th International Symposium on Experimental Algorithms (SEA 2022). Editors: Christian Schulz and Bora Uçar;"
+  start: 22:1  # First page number
+  end: 22:16 # Last page number
+  title: "Computing Maximal Unique Matches with the r-index"
+  year: 2022

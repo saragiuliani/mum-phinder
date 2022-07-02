@@ -1,3 +1,7 @@
+[![Release](https://img.shields.io/github/release/saragiuliani/mum-phinder.svg)](https://github.com/saragiuliani/mum-phinder/releases)
+[![Downloads](https://img.shields.io/github/downloads/saragiuliani/mum-phinder/total?logo=github)](https://github.com/saragiuliani/mum-phinder/archive/master.zip)
+[![Docker Pulls](https://badgen.net/docker/pulls/maxrossi91/mum-phinder?icon=docker&label=pulls)](https://hub.docker.com/r/maxrossi91/mum-phinder/)
+[![Docker Image Size](https://badgen.net/docker/size/maxrossi91/mum-phinder?icon=docker&label=image%20size)](https://hub.docker.com/r/maxrossi91/mum-phinder/)
 
 # MUM-PHINDER 
 A framework to compute MUMs on large high repetitive datasets via matching startistics computation.
@@ -7,7 +11,60 @@ MUM-PHINDER computes the set of the Maximal Unique Matches of a query pattern ag
 We require the pattern and the text to be available in form of sequences stored in the `.fa` (FASTA) format.
 To use our solution, you need to have recent `cmake`, `g++`, `zsh`, and `python 3` installed.
 
+## How to get MUM-PHINDER
 
+### Docker
+
+MUM-PHINDER is available on `docker`:
+
+```console
+docker pull maxrossi91/mum-phinder:latest
+docker run maxrossi91/mum-phinder:latest mum-phinder -h
+```
+if using `singularity`:
+```console
+singularity pull mum-phinder_sif docker://maxrossi91/mum-phinder:latest
+./mum-phinder_sif mum-phinder --help
+```
+
+### Install Packages
+
+We provide MUM-PHINDER on a `.deb` package:
+```console
+wget https://github.com/saragiuliani/mum-phinder/releases/download/v0.0.1/mum-phinder-v0.0.1_amd64.deb
+sudo dpkg -i mum-phinder-v0.0.1_amd64.deb
+mum-phinder -h
+```
+We provide MUM-PHINDER on a linux `.sh` installer:
+```console
+wget https://github.com/saragiuliani/mum-phinder/releases/download/v0.0.1/mum-phinder-v0.0.1-Linux.sh
+chmod +x mum-phinder-v0.0.1-Linux.sh
+./mum-phinder-v0.0.1-Linux.sh
+mum-phinder -h
+```
+We provide MUM-PHINDER on a pre-compiled `.tar.gz`:
+```console
+wget https://github.com/saragiuliani/mum-phinder/releases/download/v0.0.1/mum-phinder-v0.0.1-Linux.tar.gz
+tar -xzvf mum-phinder-v0.0.1-Linux.tar.gz
+mum-phinder-v0.0.1-Linux/bin/mum-phinder -h
+```
+
+### Compile and install
+
+```console
+git clone https://github.com/saragiuliani/mum-phinder
+cd mum-phinder
+mkdir build
+cd build; cmake -DCMAKE_INSTALL_PREFIX=<path/to/install/prefix> ..
+make
+make install
+```
+
+Replace `<path/to/install/prefix>` with your preferred install path. If not specified the install path is `/usr/bin` by default.
+
+
+
+## Usage
 ### Construction of the index:
 ```
 usage: mum-phinder build    [-h] -r REFERENCE [-w WSIZE] [-p MOD] [-t THREADS] [-k] [-v] [-f]
@@ -28,7 +85,7 @@ usage: mum-phinder build    [-h] -r REFERENCE [-w WSIZE] [-p MOD] [-t THREADS] [
 ```
 
 
-### Computing the MUMss with MUM-PHINDER:
+### Computing the MUMs with MUM-PHINDER:
 ```
 usage: mum-phinder build [-h] -i INDEX -p PATTERN 
   -h, --help            show this help message and exit
@@ -50,6 +107,7 @@ git clone https://github.com/saragiuliani/mum-phinder
 ### Compile and Install
 
 ```console
+cd mum-phinder
 mkdir build
 cd build; cmake -DCMAKE_INSTALL_PREFIX=<path/to/install/prefix> ..
 make
