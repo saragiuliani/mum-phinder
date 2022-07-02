@@ -1,8 +1,8 @@
 
 # to download the reference sequences
 
-# wget https://ftp.ebi.ac.uk/pub/databases/covid19dataportal/cdp-file-downloader.zip
-# unzip cdp-file-downloader.zip
+wget https://ftp.ebi.ac.uk/pub/databases/covid19dataportal/cdp-file-downloader.zip
+unzip cdp-file-downloader.zip
 
 mkdir -p ${1}
 
